@@ -29,3 +29,6 @@ go-poc/cmd/pocserver/pocserver
 .vscode/
 .idea/
 .DS_Store
+
+# 修复版模块的编译产物
+go-poc-patched/pocserver

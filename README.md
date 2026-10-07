@@ -7,6 +7,38 @@
 
 ---
 
+## ✅ 已修复 · 升级到 v0.2.14 即可
+
+[官方 v0.2.14](https://github.com/Wei-Shaw/sub2api/releases/tag/v0.2.14)（2026-10-07 发布）
+已同时采纳本文的**方案 A**（剥离 `return_url` query）和**方案 B**（回调参数白名单）。
+
+**实测验证**（同一份 PoC、相同攻击构造、只换源码版本）：
+
+| 版本 | 结果 |
+|---|---|
+| v0.2.13 (`b8dece90`) | 🔴 `VULNERABLE` — HTTP 200，余额 +10.00 |
+| v0.2.14 | 🟢 `NOT_VULNERABLE` — HTTP 400 `verify failed` |
+
+📖 验证过程与代码核对见 **[docs/PATCH_VERIFICATION.md](docs/PATCH_VERIFICATION.md)**
+
+<details>
+<summary>如果你仍在 v0.2.13 及更早版本</summary>
+
+```bash
+docker pull weishaw/sub2api:0.2.14
+# 或
+curl -sSL https://raw.githubusercontent.com/Wei-Shaw/sub2api/main/deploy/install.sh | sudo bash
+```
+
+**同版本还有一处破坏性变更**（#7850，与本漏洞无关）：全新 `AUTO_SETUP` 安装时
+`ADMIN_PASSWORD` 少于 8 字节或超过 72 字节、或 `ADMIN_EMAIL` 非法会**直接失败**；
+未设置 `ADMIN_EMAIL` 时管理员邮箱不再是 `admin@sub2api.local`，
+从**首次启动日志**取。已有部署不受影响。
+
+</details>
+
+---
+
 ## ⚠️ 法律声明
 
 本工具仅供安全研究与防御自查。
@@ -91,13 +123,15 @@ sub2api-easypay-poc/
 │   ├── reference_easypay_poc_original.py      # 叶白
 │   └── reference_auto_register_by_yebai.py    # 叶白（自动注册）
 │
-├── go-poc/                     # 最小 Go 模块（真实 easypay.go 未改动）
+├── go-poc/                     # 最小 Go 模块 · v0.2.13（未修复）
+├── go-poc-patched/             # 最小 Go 模块 · v0.2.14（已修复）—— 离线复现修复效果
 │   ├── cmd/pocserver/main.go   # 真实验签服务端
 │   └── internal/payment/       # 从上游原样拷贝
 │
 ├── docs/
+│   ├── PATCH_VERIFICATION.md   # ⭐ v0.2.14 修复实测
+│   ├── REMEDIATION.md          # 修复方案
 │   ├── VERDICT.md              # 完整验证报告
-│   ├── REMEDIATION.md          # ⭐ 修复方案
 │   └── TIMELINE.md             # 迭代过程
 │
 └── evidence/                   # 真实验签日志片段
@@ -112,17 +146,19 @@ sub2api-easypay-poc/
 
 ## 🔧 修复方案
 
-**一句话**：根因是 `easyPaySign` 不转义，**修 `return_url` 或加白名单，别动签名算法**。
+**一句话**：根因是 `easyPaySign` 不转义。官方已在 v0.2.14 修好，**升级即可**。
 
-| 优先级 | 方案 | 改动 |
-|---|---|---|
-| 🔴 立即 | `CanonicalizeReturnURL` 加 `parsed.RawQuery = ""` | 一行 |
-| 🟡 本周 | `VerifyNotification` 加回调字段白名单 | ~15 行 |
-| 🟢 可选 | 入账后异步向上游 `api.php` 复核 | 较大 |
+| 优先级 | 方案 | 改动 | 状态 |
+|---|---|---|---|
+| 🔴 立即 | **升级到 v0.2.14** | `docker pull` | ✅ **已发布** |
+| — | `CanonicalizeReturnURL` 加 `parsed.RawQuery = ""` | 一行 | ✅ 已采纳 |
+| — | `VerifyNotification` 加回调字段白名单 | ~15 行 | ✅ 已采纳 |
+| 🟢 可选 | 入账后异步向上游 `api.php` 复核 | 较大 | ⚠️ 尚未 |
 
 > ⚠️ **不要**给签名参数值加转义——会破坏与易支付上游的签名兼容性，导致**所有订单失败**。
+> 好消息：官方也没这么做，兼容性保住了。
 
-📖 完整分析、代码位置、权衡见 **[docs/REMEDIATION.md](docs/REMEDIATION.md)**
+📖 原理、代码位置、权衡、未采纳项的风险见 **[docs/REMEDIATION.md](docs/REMEDIATION.md)**
 
 ---
 
