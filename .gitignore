@@ -1,0 +1,31 @@
+# 真实目标清单 —— 不入库
+alive.txt
+targets_*.json
+*_alive.json
+scan_report.tsv
+report_phase1.tsv
+scan_phase1_backup.tsv
+scan_*.log
+
+# 账号凭据 —— 绝不入库
+poc_accounts.jsonl
+*.jsonl
+!evidence/*.jsonl
+.env
+*.token
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Go
+go-poc/pocserver
+go-poc/cmd/pocserver/pocserver
+*.exe
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
