@@ -197,4 +197,19 @@ cd poc && python3 poc_v4_menu.py    # 选 3
 
 ## License
 
-MIT
+**LGPL-3.0** —— 与上游 [Wei-Shaw/sub2api](https://github.com/Wei-Shaw/sub2api) 一致。
+
+本仓库的 `go-poc/` 与 `go-poc-patched/` 包含上游 **LGPL-3.0** 源码的
+**逐字节原样拷贝**（已 sha256 校验），因此整体协议必须与上游一致。
+本仓库采用 LGPL-3.0 而非 MIT，正是为了满足 LGPL §4 的再分发要求。
+
+各部分协议与版权归属详见 **[NOTICE](NOTICE)**：
+
+| 部分 | 协议 | 归属 |
+|---|---|---|
+| `go-poc/` `go-poc-patched/` | LGPL-3.0 | **Wei-Shaw/sub2api**（原样拷贝，v0.2.13 / v0.2.14） |
+| `reference/` | 作者指定 | **叶白**（原样保留，一字未改） |
+| `poc/` `docs/` `README.md` | LGPL-3.0 | 本仓库原创 |
+
+> 上游源码以源文件形式完整提供且**未作任何修改**（sha256 校验），
+> 版本与归属详见 [NOTICE](NOTICE)。

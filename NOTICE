@@ -1,0 +1,96 @@
+# NOTICE
+
+本仓库包含来自第三方项目的材料，各部分协议不同。
+
+---
+
+## 1. 来自 Wei-Shaw/sub2api
+
+**协议：GNU Lesser General Public License v3.0 (LGPL-3.0)**
+来源：<https://github.com/Wei-Shaw/sub2api>
+
+以下文件为上游源码的**逐字节原样拷贝**（经 sha256 校验）：
+
+| 文件 | 版本 |
+|---|---|
+| `go-poc/internal/payment/provider/easypay.go` | v0.2.13 |
+| `go-poc/internal/payment/types.go` | v0.2.13 |
+| `go-poc/internal/payment/crypto.go` | v0.2.13 |
+| `go-poc/internal/payment/currency.go` | v0.2.13 |
+| `go-poc/internal/payment/amount.go` | v0.2.13 |
+| `go-poc-patched/internal/payment/provider/easypay.go` | **v0.2.14**（含官方修复补丁） |
+| `go-poc-patched/internal/payment/` 下其余 `.go` | v0.2.13 |
+
+> **v0.2.14 的 `easypay.go` 是本仓库唯一一处偏离「原样拷贝」的例外** ——
+> 它取自 v0.2.14 tag，用于复现 issue #7881 的官方修复效果。
+> 该文件同样逐字节拷贝自上游，只是版本号不同。
+
+上游版权归 **Wei-Shaw 及其贡献者**所有。
+
+本仓库**未对**上述上游源码作任何修改（经 sha256 逐字节校验）。为使
+LGPL §4 的再分发要求（提供完整源码、标明出处、标注修改处）得到满足：
+
+- 上游源码**以源文件形式**完整提供于 `go-poc/` 与 `go-poc-patched/`
+- 本 NOTICE 标明这些文件来自上游、标注了确切版本与来源 URL
+- **修改处声明：无。** 上游文件内容未作任何改动
+- 上游源文件本身未包含逐文件版权头（经检查，`easypay.go` 等文件以
+  package 注释开头），因此本 NOTICE 是版权归属的**唯一声明**，
+  上游版权归 Wei-Shaw 及其贡献者
+
+---
+
+## 2. 参考脚本（作者贡献）
+
+| 文件 | 作者 | 说明 |
+|---|---|---|
+| `reference/reference_easypay_poc_original.py` | **叶白** | 攻击链参考，原样保留未改动 |
+| `reference/reference_auto_register_by_yebai.py` | **叶白** | 自动注册模块来源，原样保留未改动 |
+
+这两个文件由 **叶白** 编写并提供给本仓库，在 `reference/` 下**原样保留、一字未改**，
+用于对照与溯源。
+
+若叶白另有指定协议，以其本人声明为准。本仓库未对其代码作任何修改。
+
+本仓库在 `poc_v2_auto_register.py` 与 `poc_v3_attack_chain.py` 中基于这些参考
+**独立实现了**改进版本（邮箱验证码自动获取、Go 语义修正、真实源码自检等），
+改进版本的作者为本仓库维护者。
+
+---
+
+## 3. 本仓库原创部分
+
+以下内容为本仓库原创，采用 **LGPL-3.0**（与上游一致，以避免同一仓库内
+协议冲突导致的使用限制）：
+
+- `poc/` 下的 Python PoC 全部文件
+- `go-poc/cmd/pocserver/main.go`（pocserver 桩服务，本仓库编写）
+- `go-poc/internal/payment/provider/easypay_smuggle_poc_test.go`（漏洞复现单测）
+- `poc/poc_scan_fleet.py`（批量扫描器）
+- `docs/` 全部文档
+- `README.md` / `.gitignore` / `evidence/`
+
+---
+
+## 4. 协议说明
+
+本仓库整体以 **LGPL-3.0** 发布。
+
+选择 LGPL-3.0 而非 MIT 的原因：
+
+1. `go-poc/` 与 `go-poc-patched/` 含上游 LGPL-3.0 源码，
+   整体协议必须与之一致（见 LGPL §4）
+2. 保持单一协议，避免使用者面对混合协议的合规负担
+3. LGPL 允许链接与修改，但要求**修改处标明**、**再分发时提供源码** ——
+   这些义务在本仓库中均已履行
+
+`go-poc/go.mod` 声明的 module path 为上游原始路径
+`github.com/Wei-Shaw/sub2api`，**仅用于让上游源码包在其原有的
+import 路径下原样编译**，不代表本仓库是该 module 的分发方或衍生品声明。
+
+---
+
+## 5. 商标与归属
+
+- **sub2api** 是 Wei-Shaw/sub2api 项目的名称，其商标与归属归原作者所有
+- 本仓库与 Wei-Shaw/sub2api 无隶属、背书或合作关系
+- 上游安全公告与 issue 的响应权归上游维护者
